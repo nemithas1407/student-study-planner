@@ -1,0 +1,1080 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Study Planner</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 30px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.task-form,
+.progress-section,
+.task-section {
+    background: white;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    background: #4a90e2;
+    color: white;
+}
+
+button:hover {
+    background: #357abd;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 25px;
+    background: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#progress {
+    width: 0%;
+    height: 100%;
+    background: #4caf50;
+    transition: 0.3s;
+}
+
+#progressText {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 5px solid #4a90e2;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.task.completed {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-info h3 {
+    margin-bottom: 5px;
+}
+
+.task-info p {
+    color: #666;
+    font-size: 14px;
+}
+
+.task-buttons button {
+    width: auto;
+    padding: 8px 12px;
+    margin-left: 5px;
+}
+
+.complete-btn {
+    background: #28a745;
+}
+
+.delete-btn {
+    background: #dc3545;
+}
+
+.high {
+    border-left-color: #dc3545;
+}
+
+.medium {
+    border-left-color: #ffc107;
+}
+
+.low {
+    border-left-color: #28a745;
+}
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .task {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-buttons {
+        margin-top: 10px;
+    }
+
+}
+</style>
+
+<body>
+
+    <div class="container">
+
+        <h1>📚 Student Study Planner</h1>
+        <p class="subtitle">Plan your studies and stay organized!</p>
+
+        <!-- Add Task Section 
+        <div class="task-form">
+
+            <h2>Add Study Task</h2>
+
+            <input type="text" id="subject" placeholder="Enter subject">
+
+            <input type="text" id="topic" placeholder="Enter topic">
+
+            <input type="date" id="date">
+
+            <select id="priority">
+                <option value="High">High Priority</option>
+                <option value="Medium">Medium Priority</option>
+                <option value="Low">Low Priority</option>
+            </select>
+
+            <button onclick="addTask()">Add Task</button>
+
+        </div>
+
+        <!-- Progress 
+        <div class="progress-section">
+
+            <h2>Study Progress</h2>
+
+            <div class="progress-bar">
+                <div id="progress"></div>
+            </div>
+
+            <p id="progressText">0% Completed</p>
+
+        </div>
+
+        <!-- Task List 
+        <div class="task-section">
+
+            <h2>📋 My Study Tasks</h2>
+
+            <div id="taskList"></div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+<script>
+    let tasks = [];
+
+function addTask() {
+
+    const subject = document.getElementById("subject").value;
+    const topic = document.getElementById("topic").value;
+    const date = document.getElementById("date").value;
+    const priority = document.getElementById("priority").value;
+
+    if (subject === "" || topic === "" || date === "") {
+        alert("Please fill all the fields!");
+        return;
+    }
+
+    const task = {
+        id: Date.now(),
+        subject: subject,
+        topic: topic,
+        date: date,
+        priority: priority,
+        completed: false
+    };
+
+    tasks.push(task);
+
+    displayTasks();
+
+    document.getElementById("subject").value = "";
+    document.getElementById("topic").value = "";
+    document.getElementById("date").value = "";
+
+}
+
+function displayTasks() {
+
+    const taskList = document.getElementById("taskList");
+
+    taskList.innerHTML = "";
+
+    tasks.forEach(task => {
+
+        const taskDiv = document.createElement("div");
+
+        taskDiv.classList.add("task");
+
+        taskDiv.classList.add(task.priority.toLowerCase());
+
+        if (task.completed) {
+            taskDiv.classList.add("completed");
+        }
+
+        taskDiv.innerHTML = `
+
+            <div class="task-info">
+
+                <h3>${task.subject}</h3>
+
+                <p>
+                    Topic: ${task.topic}
+                </p>
+
+                <p>
+                    Date: ${task.date}
+                </p>
+
+                <p>
+                    Priority: ${task.priority}
+                </p>
+
+            </div>
+
+            <div class="task-buttons">
+
+                <button 
+                    class="complete-btn"
+                    onclick="completeTask(${task.id})">
+                    ✓
+                </button>
+
+                <button 
+                    class="delete-btn"
+                    onclick="deleteTask(${task.id})">
+                    Delete
+                </button>
+
+            </div>
+
+        `;
+
+        taskList.appendChild(taskDiv);
+
+    });
+
+    updateProgress();
+
+}
+
+function completeTask(id) {
+
+    tasks = tasks.map(task => {
+
+        if (task.id === id) {
+            task.completed = !task.completed;
+        }
+
+        return task;
+
+    });
+
+    displayTasks();
+
+}
+
+function deleteTask(id) {
+
+    tasks = tasks.filter(task => task.id !== id);
+
+    displayTasks();
+
+}
+
+function updateProgress() {
+
+    const progress = document.getElementById("progress");
+    const progressText = document.getElementById("progressText");
+
+    if (tasks.length === 0) {
+
+        progress.style.width = "0%";
+        progressText.innerText = "0% Completed";
+
+        return;
+    }
+
+    const completedTasks =
+        tasks.filter(task => task.completed).length;
+
+    const percentage =
+        Math.round((completedTasks / tasks.length) * 100);
+
+    progress.style.width = percentage + "%";
+
+    progressText.innerText =
+        percentage + "% Completed";
+
+}
+</script>
+</html -->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Study Planner</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background: #f4f6f8;
+
+    padding: 30px;
+}
+
+
+.container {
+
+    max-width: 850px;
+
+    margin: auto;
+}
+
+
+h1 {
+
+    text-align: center;
+
+    margin-bottom: 10px;
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    color: #666;
+
+    margin-bottom: 30px;
+}
+
+
+.task-form,
+.progress-section,
+.task-section {
+
+    background: white;
+
+    padding: 25px;
+
+    margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+
+h2 {
+
+    margin-bottom: 20px;
+}
+
+
+label {
+
+    display: block;
+
+    margin-top: 10px;
+
+    margin-bottom: 6px;
+
+    font-weight: bold;
+}
+
+
+input,
+textarea {
+
+    width: 100%;
+
+    padding: 12px;
+
+    margin-bottom: 10px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+}
+
+
+textarea {
+
+    height: 100px;
+
+    resize: vertical;
+}
+
+
+button {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+    background: #4a90e2;
+
+    color: white;
+
+    margin-top: 10px;
+}
+
+
+button:hover {
+
+    background: #357abd;
+}
+
+
+/* PROGRESS BAR */
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 25px;
+
+    background: #ddd;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+#progress {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: #4caf50;
+
+    transition: 0.3s;
+}
+
+
+#progressText {
+
+    margin-top: 10px;
+
+    text-align: center;
+}
+
+
+/* TASK */
+
+.task {
+
+    padding: 18px;
+
+    margin-bottom: 12px;
+
+    background: #f8f9fa;
+
+    border-radius: 8px;
+
+    border-left: 5px solid #4a90e2;
+}
+
+
+.task.completed {
+
+    opacity: 0.6;
+
+    text-decoration: line-through;
+}
+
+
+.task h3 {
+
+    margin-bottom: 8px;
+}
+
+
+.task p {
+
+    color: #666;
+
+    margin-bottom: 5px;
+
+    font-size: 14px;
+}
+
+
+.task-buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+
+.task-buttons button {
+
+    width: auto;
+
+    padding: 8px 15px;
+
+    margin: 0;
+}
+
+
+.complete-btn {
+
+    background: #28a745;
+}
+
+
+.delete-btn {
+
+    background: #dc3545;
+}
+
+
+/* DAILY PLAN */
+
+.day-title {
+
+    background: #4a90e2;
+
+    color: white;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    margin-bottom: 10px;
+}
+
+
+@media (max-width: 600px) {
+
+    body {
+
+        padding: 15px;
+    }
+
+    .container {
+
+        width: 100%;
+    }
+
+}
+</style>
+<body>
+
+<div class="container">
+
+    <h1>📚 Student Study Planner</h1>
+
+    <p class="subtitle">
+        Create your personalized study plan
+    </p>
+
+
+    <!-- STUDY PLAN GENERATOR -->
+
+    <div class="task-form">
+
+        <h2>📝 Create Study Plan</h2>
+
+        <label>Subject</label>
+
+        <input
+            type="text"
+            id="subject"
+            placeholder="Example: Data Structures"
+        >
+
+
+        <label>Topics</label>
+
+        <textarea
+            id="topics"
+            placeholder="Enter topics separated by commas&#10;Example: Stack, Queue, Linked List, Tree"
+        ></textarea>
+
+
+        <label>Exam Date</label>
+
+        <input
+            type="date"
+            id="examDate"
+        >
+
+
+        <label>Study Hours Per Day</label>
+
+        <input
+            type="number"
+            id="studyHours"
+            min="1"
+            max="12"
+            placeholder="Example: 3"
+        >
+
+
+        <button onclick="generateStudyPlan()">
+            🤖 Generate Study Plan
+        </button>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div class="progress-section">
+
+        <h2>📊 Study Progress</h2>
+
+        <div class="progress-bar">
+
+            <div id="progress"></div>
+
+        </div>
+
+        <p id="progressText">
+            0% Completed
+        </p>
+
+    </div>
+
+
+    <!-- STUDY PLAN -->
+
+    <div class="task-section">
+
+        <h2>📅 My Study Plan</h2>
+
+        <div id="taskList"></div>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+<script>
+    let tasks = [];
+
+
+// ========================================
+// GENERATE STUDY PLAN
+// ========================================
+
+function generateStudyPlan() {
+
+    const subject =
+        document.getElementById("subject").value.trim();
+
+    const topicsInput =
+        document.getElementById("topics").value.trim();
+
+    const examDate =
+        document.getElementById("examDate").value;
+
+    const studyHours =
+        Number(document.getElementById("studyHours").value);
+
+
+    // CHECK INPUTS
+
+    if (
+        subject === "" ||
+        topicsInput === "" ||
+        examDate === "" ||
+        studyHours <= 0
+    ) {
+
+        alert("Please fill all the details!");
+
+        return;
+    }
+
+
+    // GET TOPICS
+
+    const topics = topicsInput
+        .split(",")
+        .map(topic => topic.trim())
+        .filter(topic => topic !== "");
+
+
+    if (topics.length === 0) {
+
+        alert("Please enter at least one topic.");
+
+        return;
+    }
+
+
+    // CALCULATE DAYS
+
+    const today = new Date();
+
+    const exam = new Date(examDate);
+
+    const difference =
+        exam - today;
+
+    const daysAvailable =
+        Math.ceil(
+            difference / (1000 * 60 * 60 * 24)
+        );
+
+
+    if (daysAvailable <= 0) {
+
+        alert("Please select a future exam date.");
+
+        return;
+    }
+
+
+    // CLEAR OLD PLAN
+
+    tasks = [];
+
+
+    // CALCULATE TOPICS PER DAY
+
+    const topicsPerDay =
+        Math.ceil(topics.length / daysAvailable);
+
+
+    let topicIndex = 0;
+
+
+    // CREATE DAILY PLAN
+
+    for (
+        let day = 0;
+        day < daysAvailable && topicIndex < topics.length;
+        day++
+    ) {
+
+        const currentDate = new Date();
+
+        currentDate.setDate(
+            currentDate.getDate() + day
+        );
+
+
+        const dateString =
+            currentDate.toISOString().split("T")[0];
+
+
+        for (
+            let i = 0;
+            i < topicsPerDay && topicIndex < topics.length;
+            i++
+        ) {
+
+            const task = {
+
+                id: Date.now() + topicIndex,
+
+                subject: subject,
+
+                topic: topics[topicIndex],
+
+                date: dateString,
+
+                hours: studyHours,
+
+                completed: false
+
+            };
+
+
+            tasks.push(task);
+
+            topicIndex++;
+
+        }
+
+    }
+
+
+    displayTasks();
+
+}
+
+
+// ========================================
+// DISPLAY TASKS
+// ========================================
+
+function displayTasks() {
+
+    const taskList =
+        document.getElementById("taskList");
+
+
+    taskList.innerHTML = "";
+
+
+    if (tasks.length === 0) {
+
+        taskList.innerHTML =
+            "<p>No study plan created yet.</p>";
+
+        updateProgress();
+
+        return;
+    }
+
+
+    tasks.forEach(task => {
+
+        const taskDiv =
+            document.createElement("div");
+
+
+        taskDiv.classList.add("task");
+
+
+        if (task.completed) {
+
+            taskDiv.classList.add("completed");
+
+        }
+
+
+        taskDiv.innerHTML = `
+
+            <h3>📚 ${task.subject}</h3>
+
+            <p>
+                📖 Topic: ${task.topic}
+            </p>
+
+            <p>
+                📅 Date: ${task.date}
+            </p>
+
+            <p>
+                ⏰ Study Time: ${task.hours} hour(s)
+            </p>
+
+
+            <div class="task-buttons">
+
+                <button
+                    class="complete-btn"
+                    onclick="completeTask(${task.id})">
+
+                    ${task.completed
+                        ? "↩ Undo"
+                        : "✓ Completed"}
+
+                </button>
+
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteTask(${task.id})">
+
+                    🗑 Delete
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        taskList.appendChild(taskDiv);
+
+    });
+
+
+    updateProgress();
+
+}
+
+
+// ========================================
+// COMPLETE TASK
+// ========================================
+
+function completeTask(id) {
+
+    tasks = tasks.map(task => {
+
+        if (task.id === id) {
+
+            task.completed =
+                !task.completed;
+
+        }
+
+        return task;
+
+    });
+
+
+    displayTasks();
+
+}
+
+
+// ========================================
+// DELETE TASK
+// ========================================
+
+function deleteTask(id) {
+
+    tasks =
+        tasks.filter(task => task.id !== id);
+
+
+    displayTasks();
+
+}
+
+
+// ========================================
+// UPDATE PROGRESS
+// ========================================
+
+function updateProgress() {
+
+    const progress =
+        document.getElementById("progress");
+
+    const progressText =
+        document.getElementById("progressText");
+
+
+    if (tasks.length === 0) {
+
+        progress.style.width = "0%";
+
+        progressText.innerText =
+            "0% Completed";
+
+        return;
+    }
+
+
+    const completedTasks =
+        tasks.filter(
+            task => task.completed
+        ).length;
+
+
+    const percentage =
+        Math.round(
+            (completedTasks / tasks.length) * 100
+        );
+
+
+    progress.style.width =
+        percentage + "%";
+
+
+    progressText.innerText =
+        percentage + "% Completed";
+
+}
+</script>
+
+</html>
